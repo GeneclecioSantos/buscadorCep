@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUSCAR CEP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            background-color: rgb(3, 126, 3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #containerPrimeiro {
+            width: 900px;
+            height: 200px;
+            background-color: #cecece;
+            padding: 50px;
+            border-radius: 20px;
+            outline: 5px double #d3f709;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #containerSegundo {
+            margin-top: 50px;
+            width: 900px;
+            min-height: 200px;
+            background-color: #cecece;
+            padding-left: 50px;
+            padding-top: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-content: baseline;
+            border-radius: 20px;
+            outline: 5px double #d3f709;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="container">
+        <div id="containerPrimeiro">
+            <h1>SUPER BUSCADOR DE CEP</h1>
+            <span>Pesquise agora qualquer CEP e receba informações onstantâneas.</span>
+            <div>
+                <label for="inputCep">CEP:</label>
+                <input type="number" id="inputCep" name="input" placeholder="Digite seu CEP aqui">
+                <button onclick="buscarCep()">Carregar</button>
+            </div>
+        </div>
+        <div id="containerSegundo">
+            <h2>Resultados</h2>
+            <b>Cep pesquisado:</b><span id="cepPesquisado"></span>
+            <b>Logradouro:</b><span id="logradouro"></span>
+            <b>Complemento:</b><span id="complemento"></span>
+            <b>Bairro:</b><span id="bairro"></span>
+            <b>Localidade:</b><span id="localidade"></span>
+            <b>UF:</b><span id="uf"></span>
+        </div>
+    </div>
+    <script>
+
+        
+        var cepPesquisado = document.getElementById("cepPesquisado");
+        var logradouro = document.getElementById("logradouro");
+        var complemento = document.getElementById("complemento");
+        var bairro = document.getElementById("bairro");
+        var localidade = document.getElementById("localidade");
+        var uf = document.getElementById("uf");
+        // viacep.com.br / ws / 01001000 / json /
+
+        function buscarCep() {
+            var cepDesejado = document.getElementById("inputCep").value; // Input com o cod desejado
+
+            var xhr = new XMLHttpRequest(); //cria o navegador 
+            xhr.open("GET", "https://viacep.com.br/ws/" + cepDesejado + "/json/") //coloca o link 
+            xhr.send(null); //enviar a requisição 
+            xhr.onreadystatechange = function () { //abre o navegador 
+
+                if (xhr.readyState === 4) { // tres iguais para comparar mais e 4 significa que está carregado 
+                    console.log(JSON.parse(xhr.responseText)); // json.parse para transferir para objeto
+
+                    var cepResposta = JSON.parse(xhr.responseText);
+
+                    // IF PARA VERIFICAR SE O CEP É VALIDA 
+                    if (cepResposta.cep == undefined) {
+                        alert("Número não localizado no sistema");
+                    } else {
+
+                    cepPesquisado.innerHTML = cepResposta.cep;
+                    logradouro.innerHTML = cepResposta.logradouro;
+                    complemento.innerHTML = cepResposta.complemento;
+                    bairro.innerHTML = cepResposta.bairro;
+                    localidade.innerHTML = cepResposta.localidade;
+                    uf.innerHTML = cepResposta.uf;
+
+                    }
+                }
+            }
+
+        }
+
+
+    </script>
+</body>
+
+</html>
